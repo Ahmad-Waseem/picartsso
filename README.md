@@ -47,7 +47,7 @@ This notebook processes images by segmenting the shirt region using a deep learn
 - **Visualization of Segmented Shirts:**
   - Sample output:
 
-  ![](images/segmented_output.jpg)
+  ![](images/processed_590_shirt.jpg)      ![](images/processed_590_shirt.jpg)
 
 ---
 
@@ -76,7 +76,7 @@ This notebook provides insights into the dataset before training. It includes:
   - Uses `cv2.addWeighted()` to blend original images with their corresponding masks.
   - Example output:
 
-  ![](images/dataset_sample.jpg)
+  ![](images/dataset_sample.png)
 
 ### **2.3 Color Distribution**
 - **Histograms:**  
@@ -109,7 +109,7 @@ This notebook provides insights into the dataset before training. It includes:
 - **Performance Metrics:**  
   - Loss plots visualized over epochs:
 
-  ![](images/loss_plot.jpg)
+  ![](images/g_loss_plot.png)      ![](images/g_loss_plot.png)
 
 ---
 
@@ -138,7 +138,7 @@ A **Streamlit** app allowing users to:
 
 
 ### **Run Web App**
-Make sure to fit the trained model
+Make sure to fit the trained model first!
 ```
 streamlit run picartsso.py
 ```
