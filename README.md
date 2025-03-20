@@ -45,9 +45,9 @@ This notebook processes images by segmenting the shirt region using a deep learn
   - Converts masks to RGBA format for alpha transparency.
 
 - **Visualization of Segmented Shirts:**
-  - Sample output:
-
-  ![](images/processed_590_shirt.jpg)      ![](images/processed_590_shirt.jpg)
+  - Sample Segmented output:
+    
+  ![](images/processed_590_shirt.jpg)      ![](images/processed_616_shirt.jpg)
 
 ---
 
@@ -109,7 +109,7 @@ This notebook provides insights into the dataset before training. It includes:
 - **Performance Metrics:**  
   - Loss plots visualized over epochs:
 
-  ![](images/g_loss_plot.png)      ![](images/g_loss_plot.png)
+  ![](images/g_loss_plot.png)      ![](images/d_loss_plot.png)
 
 ---
 
