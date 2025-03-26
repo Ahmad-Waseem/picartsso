@@ -1,6 +1,7 @@
 # Picartsso – End-to-End Image Style Transfer and Segmentation (Experimental)
 
-**Picartsso is a complete experimental pipeline for dataset analysis, image preprocessing, model training, and deploying a web application for neural style transfer on clothing items. Made on the basis of what if? (if we concatenate Input (shirt) and Reference (art) Image channels, then overfit generator on concatenated channels, while Discriminator judges on reconstruction of original Input (shirt), meanwhile the art channels leave their Residue)**
+Picartsso is a complete experimental pipeline for dataset analysis, image preprocessing, model training, and deploying a web application for neural style transfer on clothing items. 
+#### **Made on the basis of what if? (if we concatenate Input (shirt) and Reference (art) Image channels, then overfit generator on concatenated channels, while Discriminator judges on reconstruction of original Input (shirt), meanwhile the art channels leave their Residue)**
 
 The repository consists of:
 
