@@ -8,6 +8,7 @@ from PIL import Image
 import requests
 import io
 
+
 class PairedGenerator(nn.Module):
     def __init__(self):
         super(PairedGenerator, self).__init__()
@@ -173,26 +174,46 @@ def apply_style_transfer(shirt_img, art_img, generator, transform):
     return styled_shirt_img
 
 
-def merger(shirt_img, art_img):
-    # Inference
-    generator = PairedGenerator()
+# Load the model once at module level
+generator = None
+transform = None
 
-    # Download model from Dropbox Open link
-    dropbox_url = "https://www.dropbox.com/scl/fi/uwesqxow3sq6l46md5gf5/checkpoint_epoch_200.pth?rlkey=6apulu5bupnlh7df3g8ocztpk&st=rb3tk9b1&dl=1"
-    response = requests.get(dropbox_url)
-    buffer = io.BytesIO(response.content)
-
-    # Load model to CPU
-    generator.load_state_dict(torch.load(buffer, map_location=torch.device('cpu'))['generator_state_dict'])
-    generator.eval()
-
-    transform = transforms.Compose([
-        transforms.Resize((256, 256)),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ])
+def initialize_model():
+    """Initialize the model once and keep it in memory"""
+    global generator, transform
     
+    # Only initialize if not already done
+    if generator is None:
+        generator = PairedGenerator()
+        
+        # Download model from Dropbox Open link
+        dropbox_url = "https://www.dropbox.com/scl/fi/uwesqxow3sq6l46md5gf5/checkpoint_epoch_200.pth?rlkey=6apulu5bupnlh7df3g8ocztpk&st=rb3tk9b1&dl=1"
+        response = requests.get(dropbox_url)
+        buffer = io.BytesIO(response.content)
+        
+        # Load model to CPU
+        generator.load_state_dict(torch.load(buffer, map_location=torch.device('cpu'))['generator_state_dict'])
+        generator.eval()
+        
+        transform = transforms.Compose([
+            transforms.Resize((256, 256)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
+        
+        os.write(1, "Model initialized successfully".encode())
+    
+    return generator, transform
+
+def merger(shirt_img, art_img):
+    """Apply style transfer using the pre-loaded model"""
+    global generator, transform
+    
+    # Ensure model is initialized
+    if generator is None or transform is None:
+        generator, transform = initialize_model()
+        
     os.write(1, f"======={len(shirt_img), shirt_img.ndim}==============".encode())
     styled_shirt = apply_style_transfer(shirt_img, art_img, generator, transform)
-
+    
     return styled_shirt
