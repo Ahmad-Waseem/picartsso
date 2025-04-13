@@ -146,13 +146,13 @@ class PairedStyleDataset(Dataset):
 def apply_style_transfer(shirt_img, art_img, generator, transform):
     # Load and preprocess images
     
-    os.write(1,f"=================================Entered in funcion===============================================".encode())
+    os.write(1,f"=================================Entered in function===============================================".encode())
     # shirt_img = Image.open(shirt_path).convert('RGB')
     # art_img = Image.open(art_path).convert('RGB')
 
     shirt_img = Image.fromarray(shirt_img)
     art_img = Image.fromarray(art_img)
-    os.write(1,f"=================================OPening===============================================".encode())
+    os.write(1,f"=================================Opening===============================================".encode())
     # Apply transforms
     shirt_tensor = transform(shirt_img).unsqueeze(0)
     art_tensor = transform(art_img).unsqueeze(0)
@@ -177,7 +177,7 @@ def merger(shirt_img, art_img):
     #Inference
     generator = PairedGenerator()
     #generator.load_state_dict(torch.load('checkpoint_epoch_200.pth')['generator_state_dict'])
-    generator.load_state_dict(torch.load('checkpoint_epoch_200.pth', map_location=torch.device('cpu'))['generator_state_dict'])
+    generator.load_state_dict(torch.load('./model/checkpoint_epoch_200.pth', map_location=torch.device('cpu'))['generator_state_dict'])
     transform = transforms.Compose([
         transforms.Resize((256, 256)),
         transforms.ToTensor(),
