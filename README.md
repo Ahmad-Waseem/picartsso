@@ -26,6 +26,8 @@ The repository consists of:
       |-- input.jpg          # Sample shirt image
       |-- reference_art.jpg  # Sample reference art
       |-- output.jpg         # Generated output after style transfer
+|-- model/
+      |-- model-info.md          # Link to model
 |-- README.md                # Documentation file
 ```
 
