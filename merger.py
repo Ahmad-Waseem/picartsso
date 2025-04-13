@@ -5,7 +5,8 @@ import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader
 import os
 from PIL import Image
-import msvcrt
+import requests
+import io
 
 class PairedGenerator(nn.Module):
     def __init__(self):
@@ -146,13 +147,13 @@ class PairedStyleDataset(Dataset):
 def apply_style_transfer(shirt_img, art_img, generator, transform):
     # Load and preprocess images
     
-    os.write(1,f"=================================Entered in function===============================================".encode())
+    os.write(1,f"=============Entered in function==========".encode())
     # shirt_img = Image.open(shirt_path).convert('RGB')
     # art_img = Image.open(art_path).convert('RGB')
 
     shirt_img = Image.fromarray(shirt_img)
     art_img = Image.fromarray(art_img)
-    os.write(1,f"=================================Opening===============================================".encode())
+    os.write(1,f"===============Opening====================".encode())
     # Apply transforms
     shirt_tensor = transform(shirt_img).unsqueeze(0)
     art_tensor = transform(art_img).unsqueeze(0)
@@ -167,23 +168,31 @@ def apply_style_transfer(shirt_img, art_img, generator, transform):
     # Convert to image
     to_pil = transforms.ToPILImage()
     styled_shirt_img = to_pil(styled_shirt.squeeze(0))
-    os.write(1,f"=================================returned shirt===============================================".encode())
+    os.write(1,f"==========returned shirt================".encode())
     
     return styled_shirt_img
 
 
 def merger(shirt_img, art_img):
-
-    #Inference
+    # Inference
     generator = PairedGenerator()
-    #generator.load_state_dict(torch.load('checkpoint_epoch_200.pth')['generator_state_dict'])
-    generator.load_state_dict(torch.load('./model/checkpoint_epoch_200.pth', map_location=torch.device('cpu'))['generator_state_dict'])
+
+    # Download model from Dropbox Open link
+    dropbox_url = "https://www.dropbox.com/scl/fi/uwesqxow3sq6l46md5gf5/checkpoint_epoch_200.pth?rlkey=6apulu5bupnlh7df3g8ocztpk&st=rb3tk9b1&dl=1"
+    response = requests.get(dropbox_url)
+    buffer = io.BytesIO(response.content)
+
+    # Load model to CPU
+    generator.load_state_dict(torch.load(buffer, map_location=torch.device('cpu'))['generator_state_dict'])
+    generator.eval()
+
     transform = transforms.Compose([
         transforms.Resize((256, 256)),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
-    os.write(1,f"================================={len(shirt_img), shirt_img.ndim}===============================================".encode())
+    
+    os.write(1, f"======={len(shirt_img), shirt_img.ndim}==============".encode())
     styled_shirt = apply_style_transfer(shirt_img, art_img, generator, transform)
 
     return styled_shirt
